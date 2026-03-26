@@ -506,24 +506,31 @@ const CONFIG = {
 <script src="services/auth.js"></script>
 <script>
 
-// ── URL NOTICE ─────────────────────────────────────────
-const params = new URLSearchParams(window.location.search);
-const reason = params.get('reason');
-if (reason) {
-  const messages = {
-    session_expired: '⏱ Your session expired — please sign in again.',
-    auth_required:   '🔒 Please sign in to access the portal.',
-    unauthorized:    '⚠️ Your session was invalidated. Please sign in again.'
-  };
-  const notice = document.getElementById('urlNotice');
-  notice.textContent = messages[reason] || '';
-  if (messages[reason]) notice.classList.add('show');
-}
+// ── INIT — handle redirect response first ──────────────
+(async () => {
+  await getMSAL(); // handles redirect promise on return from MS login
 
-// If already authenticated, redirect to dashboard
-if (authService.isAuthenticated()) {
-  window.location.href = '/src/pages/dashboard.html';
-}
+  // ── URL NOTICE ─────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const reason = params.get('reason');
+  if (reason) {
+    const messages = {
+      session_expired: '⏱ Your session expired — please sign in again.',
+      auth_required:   '🔒 Please sign in to access the portal.',
+      unauthorized:    '⚠️ Your session was invalidated. Please sign in again.'
+    };
+    const notice = document.getElementById('urlNotice');
+    if (notice && messages[reason]) {
+      notice.textContent = messages[reason];
+      notice.classList.add('show');
+    }
+  }
+
+  // If already authenticated, redirect to dashboard
+  if (authService.isAuthenticated()) {
+    window.location.href = '/src/pages/dashboard.html';
+  }
+})();
 
 // ── TAB SWITCH ─────────────────────────────────────────
 function switchTab(tab) {
