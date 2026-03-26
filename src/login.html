@@ -189,9 +189,10 @@ const msalConfig = {
   auth: {
     clientId:   "337fdd29-7d4d-4a39-9b4c-4ebc0ea7bf9a",
     authority:  "https://login.microsoftonline.com/8633bc14-1446-4b1a-b39b-9eab02755c9a",
-    redirectUri: window.location.href.split('?')[0], // current page, no query string
+    redirectUri: "https://salmon-mud-0141bd200.4.azurestaticapps.net/src/auth-redirect.html",
   },
   cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: true },
+  system: { allowNativeBroker: false }
 };
 const CONFIG = {
   GRAPH: {

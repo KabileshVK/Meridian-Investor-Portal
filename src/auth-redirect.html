@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"/><title>Authenticating...</title></head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.11.1/lib/msal-browser.min.js"></script>
+<script>
+const msalConfig = {
+  auth: {
+    clientId:    "337fdd29-7d4d-4a39-9b4c-4ebc0ea7bf9a",
+    authority:   "https://login.microsoftonline.com/8633bc14-1446-4b1a-b39b-9eab02755c9a",
+    redirectUri: "https://salmon-mud-0141bd200.4.azurestaticapps.net/src/auth-redirect.html",
+  },
+  cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: true }
+};
+
+(async () => {
+  const app = new msal.PublicClientApplication(msalConfig);
+  await app.initialize();
+  const resp = await app.handleRedirectPromise();
+  if (resp?.accessToken) {
+    sessionStorage.setItem('sp_access_token', resp.accessToken);
+    sessionStorage.setItem('sp_token_expiry', Date.now() + 3600 * 1000);
+    // Restore pending action and redirect back to login
+    const pending = sessionStorage.getItem('_pending');
+    window.location.href = '/src/login.html' + (pending ? '?resume=1' : '');
+  } else {
+    window.location.href = '/src/login.html';
+  }
+})();
+</script>
+</body>
+</html>
