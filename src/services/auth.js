@@ -6,7 +6,10 @@ let _msalInstance = null;
 
 function getMSAL() {
   if (_msalInstance) return _msalInstance;
-  _msalInstance = new msal.PublicClientApplication(msalConfig);
+  // MSAL v3 — PublicClientApplication lives under window.msal
+  const PublicClientApplication = window.msal?.PublicClientApplication || window.PublicClientApplication;
+  if (!PublicClientApplication) throw new Error('MSAL library not loaded. Check CDN script tag.');
+  _msalInstance = new PublicClientApplication(msalConfig);
   return _msalInstance;
 }
 
