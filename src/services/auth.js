@@ -1,212 +1,139 @@
 // ─────────────────────────────────────────────────────────
-//  Auth Service — Magic Link via Microsoft Graph
+//  Auth Service — MSAL + Magic Link via Microsoft Graph
 // ─────────────────────────────────────────────────────────
+
+let _msalInstance = null;
+
+function getMSAL() {
+  if (_msalInstance) return _msalInstance;
+  _msalInstance = new msal.PublicClientApplication(msalConfig);
+  return _msalInstance;
+}
 
 class AuthService {
 
-  // ── GENERATE SECURE TOKEN ──────────────────────────────
   generateToken(length = 64) {
     const array = new Uint8Array(length);
     crypto.getRandomValues(array);
     return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  // ── CURRENT USER ───────────────────────────────────────
+  async getGraphToken() {
+    const msalApp = getMSAL();
+    await msalApp.initialize();
+    const accounts = msalApp.getAllAccounts();
+    if (accounts.length > 0) {
+      try {
+        const result = await msalApp.acquireTokenSilent({ scopes: CONFIG.GRAPH.SCOPES, account: accounts[0] });
+        spService.setAccessToken(result.accessToken, 3600);
+        return result.accessToken;
+      } catch(e) {}
+    }
+    const result = await msalApp.acquireTokenPopup({ scopes: CONFIG.GRAPH.SCOPES });
+    spService.setAccessToken(result.accessToken, 3600);
+    return result.accessToken;
+  }
+
   getCurrentUser() {
     const raw = sessionStorage.getItem('meridian_user');
     return raw ? JSON.parse(raw) : null;
   }
 
   setCurrentUser(user) {
-    sessionStorage.setItem('meridian_user', JSON.stringify({
-      ...user,
-      sessionStart: Date.now()
-    }));
+    sessionStorage.setItem('meridian_user', JSON.stringify({ ...user, sessionStart: Date.now() }));
   }
 
   clearSession() {
-    sessionStorage.clear();
+    sessionStorage.removeItem('meridian_user');
+    sessionStorage.removeItem('sp_access_token');
+    sessionStorage.removeItem('sp_token_expiry');
   }
 
   isAuthenticated() {
     const user = this.getCurrentUser();
     if (!user) return false;
-
-    // Session timeout check
-    const timeout = CONFIG.PORTAL.SESSION_TIMEOUT * 60 * 1000;
-    if (Date.now() - user.sessionStart > timeout) {
-      this.clearSession();
-      return false;
+    if (Date.now() - user.sessionStart > CONFIG.PORTAL.SESSION_TIMEOUT * 60 * 1000) {
+      this.clearSession(); return false;
     }
     return true;
   }
 
-  isAdmin() {
-    const user = this.getCurrentUser();
-    return user?.role === 'Admin';
-  }
+  isAdmin() { return this.getCurrentUser()?.role === 'Admin'; }
+  refreshSession() { const u = this.getCurrentUser(); if (u) this.setCurrentUser(u); }
 
-  refreshSession() {
-    const user = this.getCurrentUser();
-    if (user) this.setCurrentUser(user);
-  }
-
-  // ── OAUTH2 TOKEN (Client Credentials for Graph API) ────
-  // NOTE: In production this must be done server-side (Azure Function)
-  // This pattern is here to show the flow — client secret must NOT
-  // be in frontend code in production. Use Azure Functions as proxy.
-  async getGraphToken() {
-    // In production: call your Azure Function endpoint
-    // e.g. await fetch('/api/auth/token')
-    // For demo with delegated permissions (user login), use MSAL instead:
-    // https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-overview
-
-    const existing = sessionStorage.getItem('sp_access_token');
-    const expiry   = sessionStorage.getItem('sp_token_expiry');
-    if (existing && expiry && Date.now() < parseInt(expiry)) return existing;
-
-    // Call Azure Function proxy (keep client_secret server-side)
-    const resp = await fetch('/api/auth/token');
-    if (!resp.ok) throw new Error('Failed to obtain access token');
-    const data = await resp.json();
-    spService.setAccessToken(data.access_token, data.expires_in);
-    return data.access_token;
-  }
-
-  // ── REGISTRATION FLOW ──────────────────────────────────
-  async register(name, email) {
-    await this.getGraphToken();
-
-    // Check if user already exists
+  async register(name, email, org) {
+    const token = await this.getGraphToken();
+    spService.setAccessToken(token, 3600);
     const existing = await spService.getUserByEmail(email);
-    if (existing) {
-      if (existing.Status === 'Active') {
-        throw new Error('An account with this email already exists. Please sign in instead.');
-      }
-    }
-
-    // Create user record in SharePoint
-    const user = existing || await spService.createUser({ name, email, role: 'Investor', fundAccess: 'Fund I — Residential' });
-
-    // Generate magic link token
-    const token = this.generateToken();
-    await spService.createSession(user.id, email, token);
-
-    // Build magic link
-    const magicLink = `${window.location.origin}/verify?token=${token}&action=register`;
-
-    // Send confirmation email via Graph
+    if (existing?.Status === 'Active') throw new Error('Account already exists. Please sign in instead.');
+    const user = existing || await spService.createUser({ name, email, org, role: 'Investor', fundAccess: 'Fund I — Residential' });
+    const magicToken = this.generateToken();
+    await spService.createSession(user.id, email, magicToken);
+    const magicLink = `${window.location.origin}/src/verify.html?token=${magicToken}&action=register`;
     await spService.sendMagicLinkEmail(email, name, magicLink, 'register');
-    await spService.writeAuditLog('REGISTER_REQUEST', email, `New registration: ${name}`);
-
+    await spService.writeAuditLog('REGISTER_REQUEST', email, `${name} | ${org}`);
     return true;
   }
 
-  // ── LOGIN FLOW (Magic Link) ────────────────────────────
   async requestLoginLink(email) {
-    await this.getGraphToken();
-
+    const token = await this.getGraphToken();
+    spService.setAccessToken(token, 3600);
     const user = await spService.getUserByEmail(email);
-    if (!user) {
-      throw new Error('No account found with this email. Please register first.');
-    }
-    if (user.Status === 'PendingVerification') {
-      throw new Error('Your account is pending verification. Please check your email.');
-    }
-    if (user.Status === 'Suspended') {
-      throw new Error('Your account has been suspended. Contact support.');
-    }
-
-    const token = this.generateToken();
-    await spService.createSession(user.id, email, token);
-
-    const magicLink = `${window.location.origin}/verify?token=${token}&action=login`;
+    if (!user) throw new Error('No account found. Please register first.');
+    if (user.Status === 'PendingVerification') throw new Error('Account pending verification. Check your inbox.');
+    if (user.Status === 'Suspended') throw new Error('Account suspended. Contact support.');
+    const magicToken = this.generateToken();
+    await spService.createSession(user.id, email, magicToken);
+    const magicLink = `${window.location.origin}/src/verify.html?token=${magicToken}&action=login`;
     await spService.sendMagicLinkEmail(email, user.Title, magicLink, 'login');
     await spService.writeAuditLog('LOGIN_REQUEST', email);
-
     return true;
   }
 
-  // ── VERIFY MAGIC LINK ─────────────────────────────────
   async verifyToken(token) {
-    await this.getGraphToken();
-
+    const graphToken = await this.getGraphToken();
+    spService.setAccessToken(graphToken, 3600);
     const session = await spService.getSessionByToken(token);
     if (!session) throw new Error('This link is invalid or has already been used.');
-
-    // Check expiry
-    if (new Date(session.ExpiresAt) < new Date()) {
-      throw new Error('This link has expired. Please request a new one.');
-    }
-
-    // Mark session used
+    if (new Date(session.ExpiresAt) < new Date()) throw new Error('This link has expired. Please request a new one.');
     await spService.markSessionUsed(session.id);
-
-    // Get user
     const user = await spService.getUserByEmail(session.UserEmail);
     if (!user) throw new Error('User account not found.');
-
-    // Activate if pending
     if (user.Status === 'PendingVerification') {
-      await spService.updateListItem(CONFIG.SHAREPOINT.LISTS.USERS, user.id, {
-        Status: 'Active',
-        ActivatedAt: new Date().toISOString()
-      });
+      await spService.updateListItem(CONFIG.SHAREPOINT.LISTS.USERS, user.id, { Status: 'Active', ActivatedAt: new Date().toISOString() });
     }
-
-    // Update last login
-    await spService.updateListItem(CONFIG.SHAREPOINT.LISTS.USERS, user.id, {
-      LastLoginAt: new Date().toISOString()
-    });
-
-    // Set session
+    await spService.updateListItem(CONFIG.SHAREPOINT.LISTS.USERS, user.id, { LastLoginAt: new Date().toISOString() });
     this.setCurrentUser({
-      id:         user.id,
-      name:       user.Title,
-      email:      user.Email,
-      role:       user.Role,
-      fundAccess: user.FundAccess,
-      initials:   user.Title.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+      id: user.id, name: user.Title, email: user.Email,
+      role: user.Role, fundAccess: user.FundAccess,
+      initials: (user.Title||'').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()
     });
-
     await spService.writeAuditLog('LOGIN_SUCCESS', user.Email);
     return user;
   }
 
-  // ── LOGOUT ─────────────────────────────────────────────
-  logout(reason = '') {
+  async logout(reason = '') {
     const user = this.getCurrentUser();
-    if (user) spService.writeAuditLog('LOGOUT', user.email);
+    if (user) await spService.writeAuditLog('LOGOUT', user.email).catch(()=>{});
     this.clearSession();
-    window.location.href = '/login' + (reason ? `?reason=${reason}` : '');
+    try { const m = getMSAL(); await m.initialize(); await m.logoutPopup(); } catch(e) {}
+    window.location.href = '/src/login.html' + (reason ? `?reason=${reason}` : '');
   }
 
-  // ── ROUTE GUARD ────────────────────────────────────────
   requireAuth() {
-    if (!this.isAuthenticated()) {
-      window.location.href = '/login?reason=auth_required';
-      return false;
-    }
-    this.refreshSession();
-    return true;
+    if (!this.isAuthenticated()) { window.location.href = '/src/login.html?reason=auth_required'; return false; }
+    this.refreshSession(); return true;
   }
 
   requireAdmin() {
     if (!this.requireAuth()) return false;
-    if (!this.isAdmin()) {
-      window.location.href = '/403.html';
-      return false;
-    }
+    if (!this.isAdmin()) { window.location.href = '/src/403.html'; return false; }
     return true;
   }
 }
 
 const authService = new AuthService();
 
-// Auto session timeout check every minute
 setInterval(() => {
-  const user = authService.getCurrentUser();
-  if (user && !authService.isAuthenticated()) {
-    authService.logout('session_expired');
-  }
+  if (authService.getCurrentUser() && !authService.isAuthenticated()) authService.logout('session_expired');
 }, 60000);
