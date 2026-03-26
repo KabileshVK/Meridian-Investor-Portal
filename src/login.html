@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Sign In — Meridian Investor Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary:       #0A2540;
+  --accent:        #1E6FD9;
+  --accent-light:  #3D8EF0;
+  --accent-pale:   #EBF3FF;
+  --gold:          #C8A96E;
+  --success:       #0E7C4A;
+  --danger:        #B91C1C;
+  --white:         #FFFFFF;
+  --surface:       #F7F9FC;
+  --border:        #D8E2F0;
+  --text-primary:  #0A2540;
+  --text-secondary:#4A6080;
+  --text-muted:    #8099B8;
+  --shadow-xl:     0 20px 60px rgba(10,37,64,0.18);
+  --radius:        10px;
+  --radius-lg:     16px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--primary);
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ── LEFT PANEL ── */
+.left-panel {
+  width: 56%;
+  background: linear-gradient(150deg, #061A30 0%, #0A2540 40%, #0F3460 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 56px 72px;
+  position: relative;
+  overflow: hidden;
+}
+.left-panel::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30,111,217,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.left-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -300px; left: -100px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Grid texture overlay */
+.left-panel .grid-overlay {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 14px;
+  position: relative; z-index: 1;
+}
+.brand-mark {
+  width: 44px; height: 44px;
+  background: var(--gold);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700; color: var(--primary);
+  letter-spacing: -0.5px;
+}
+.brand-text h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600;
+  color: var(--white); letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+.brand-text span {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.12em;
+}
+
+.hero { position: relative; z-index: 1; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(200,169,110,0.12);
+  border: 1px solid rgba(200,169,110,0.25);
+  border-radius: 20px;
+  padding: 6px 14px;
+  margin-bottom: 28px;
+}
+.hero-eyebrow span {
+  font-size: 11px; font-weight: 500;
+  color: var(--gold); letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero-eyebrow .pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold); animation: glow 2s infinite;
+}
+@keyframes glow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(200,169,110,0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(200,169,110,0); }
+}
+.hero h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; font-weight: 600;
+  color: var(--white); line-height: 1.15;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+.hero h2 em { color: var(--gold); font-style: normal; }
+.hero p {
+  font-size: 16px; color: rgba(255,255,255,0.55);
+  line-height: 1.75; max-width: 400px;
+}
+
+.stats {
+  display: flex; gap: 48px;
+  position: relative; z-index: 1;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 700; color: var(--gold);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* ── RIGHT PANEL ── */
+.right-panel {
+  flex: 1;
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 56px;
+  position: relative;
+}
+
+.form-container {
+  width: 100%; max-width: 400px;
+}
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 4px; margin-bottom: 36px;
+}
+.tab-btn {
+  flex: 1; padding: 10px;
+  border: none; background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  color: var(--text-muted); cursor: pointer;
+  border-radius: 7px; transition: all 0.2s;
+}
+.tab-btn.active {
+  background: var(--white);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 1px 6px rgba(10,37,64,0.08);
+}
+
+.form-panel { display: none; animation: fadeIn 0.25s ease; }
+.form-panel.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+.form-header { margin-bottom: 28px; }
+.form-header h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 600;
+  color: var(--primary); margin-bottom: 6px;
+}
+.form-header p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+.form-group { margin-bottom: 18px; }
+.form-group label {
+  display: block; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--text-secondary); margin-bottom: 8px;
+}
+.form-group input {
+  width: 100%; padding: 13px 16px;
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  color: var(--text-primary); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--white);
+}
+.form-group input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(30,111,217,0.10);
+}
+.form-group input::placeholder { color: #BDC9D8; }
+
+.btn-submit {
+  width: 100%; padding: 14px;
+  background: var(--accent); color: var(--white);
+  border: none; border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  position: relative; overflow: hidden;
+}
+.btn-submit:hover:not(:disabled) {
+  background: var(--accent-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(30,111,217,0.30);
+}
+.btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+.btn-submit .spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Success State */
+.success-state {
+  display: none; text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+.success-state.show { display: block; }
+.success-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: #E6F4EE;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+}
+.success-state h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 600;
+  color: var(--primary); margin-bottom: 10px;
+}
+.success-state p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+.success-state .email-highlight {
+  display: inline-block; margin-top: 8px;
+  background: var(--accent-pale); color: var(--accent);
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 13px; font-weight: 600;
+}
+.resend-link {
+  display: block; margin-top: 24px;
+  font-size: 13px; color: var(--text-muted);
+}
+.resend-link a {
+  color: var(--accent); cursor: pointer;
+  text-decoration: none; font-weight: 500;
+}
+.resend-link a:hover { text-decoration: underline; }
+
+/* Alert */
+.alert {
+  display: none; padding: 12px 16px;
+  border-radius: var(--radius); margin-bottom: 20px;
+  font-size: 13px; line-height: 1.5;
+}
+.alert.show { display: flex; align-items: flex-start; gap: 10px; }
+.alert-error { background: #FEE2E2; color: var(--danger); border: 1px solid #FECACA; }
+.alert-info  { background: var(--accent-pale); color: var(--accent); border: 1px solid #BFDBFE; }
+
+/* Security badges */
+.security-badges {
+  display: flex; gap: 16px; margin-top: 28px;
+  justify-content: center;
+}
+.sec-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--text-muted);
+}
+.sec-badge svg { color: var(--success); }
+
+/* URL params alert */
+.url-notice {
+  display: none; position: absolute; top: 24px;
+  left: 50%; transform: translateX(-50%);
+  background: var(--accent-pale); color: var(--accent);
+  padding: 10px 20px; border-radius: 20px;
+  font-size: 13px; font-weight: 500;
+  white-space: nowrap;
+}
+.url-notice.show { display: block; }
+
+@media (max-width: 860px) {
+  .left-panel { display: none; }
+  .right-panel { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── LEFT PANEL ── -->
+<div class="left-panel">
+  <div class="grid-overlay"></div>
+
+  <div class="brand">
+    <div class="brand-mark">M</div>
+    <div class="brand-text">
+      <h1>Meridian Capital</h1>
+      <span>Investor Portal</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <div class="pulse"></div>
+      <span>Q4 2024 Reports Live</span>
+    </div>
+    <h2>Your <em>portfolio</em>,<br>always in view.</h2>
+    <p>Secure, real-time access to your investment performance, property maps, and quarterly reporting — all in one enterprise-grade platform.</p>
+  </div>
+
+  <div class="stats">
+    <div>
+      <div class="stat-val">£248M</div>
+      <div class="stat-label">Assets Under Mgmt</div>
+    </div>
+    <div>
+      <div class="stat-val">94.2%</div>
+      <div class="stat-label">Occupancy Rate</div>
+    </div>
+    <div>
+      <div class="stat-val">47</div>
+      <div class="stat-label">Properties</div>
+    </div>
+    <div>
+      <div class="stat-val">7</div>
+      <div class="stat-label">Active Cities</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIGHT PANEL ── -->
+<div class="right-panel">
+  <div class="url-notice" id="urlNotice"></div>
+
+  <div class="form-container">
+    <div class="auth-tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginPanel" class="form-panel active">
+      <div id="loginFormWrap">
+        <div class="form-header">
+          <h3>Welcome back</h3>
+          <p>Enter your email and we'll send you a secure sign-in link — no password needed.</p>
+        </div>
+        <div class="alert alert-error" id="loginError">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 8v4m0 4h.01"/></svg>
+          <span id="loginErrorMsg"></span>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="you@organisation.com" autocomplete="email"/>
+        </div>
+        <button class="btn-submit" id="loginBtn" onclick="handleLogin()">
+          Send Sign-In Link
+        </button>
+        <div class="security-badges">
+          <div class="sec-badge">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            Passwordless
+          </div>
+          <div class="sec-badge">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            256-bit Encrypted
+          </div>
+          <div class="sec-badge">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Single-Use Link
+          </div>
+        </div>
+      </div>
+      <!-- Success state -->
+      <div class="success-state" id="loginSuccess">
+        <div class="success-icon">📨</div>
+        <h3>Check your inbox</h3>
+        <p>We've sent a secure sign-in link to:<br/><span class="email-highlight" id="loginEmailSent"></span></p>
+        <p style="margin-top:14px;font-size:13px;color:var(--text-muted)">The link expires in 15 minutes and can only be used once.</p>
+        <div class="resend-link">Didn't receive it? <a onclick="resetLoginForm()">Try again</a></div>
+      </div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="registerPanel" class="form-panel">
+      <div id="registerFormWrap">
+        <div class="form-header">
+          <h3>Request access</h3>
+          <p>Register your account. Our team will review and activate your access within 1 business day.</p>
+        </div>
+        <div class="alert alert-error" id="registerError">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 8v4m0 4h.01"/></svg>
+          <span id="registerErrorMsg"></span>
+        </div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="registerName" placeholder="e.g. James Hartley" autocomplete="name"/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="registerEmail" placeholder="you@organisation.com" autocomplete="email"/>
+        </div>
+        <div class="form-group">
+          <label>Organisation</label>
+          <input type="text" id="registerOrg" placeholder="e.g. Hartley Capital Partners"/>
+        </div>
+        <button class="btn-submit" id="registerBtn" onclick="handleRegister()">
+          Register &amp; Send Confirmation
+        </button>
+      </div>
+      <!-- Success state -->
+      <div class="success-state" id="registerSuccess">
+        <div class="success-icon">✅</div>
+        <h3>Registration submitted</h3>
+        <p>We've sent a confirmation email to:<br/><span class="email-highlight" id="registerEmailSent"></span></p>
+        <p style="margin-top:14px;font-size:13px;color:var(--text-muted)">Click the link in the email to verify your address. Our team will then review and activate your account.</p>
+        <div class="resend-link">Already have access? <a onclick="switchTab('login')">Sign in</a></div>
+      </div>
+    </div>
+
+  </div><!-- /form-container -->
+</div><!-- /right-panel -->
+
+<script src="config.example.js"></script>
+<script src="services/sharepoint.js"></script>
+<script src="services/auth.js"></script>
+<script>
+
+// ── URL NOTICE ─────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const reason = params.get('reason');
+if (reason) {
+  const messages = {
+    session_expired: '⏱ Your session expired — please sign in again.',
+    auth_required:   '🔒 Please sign in to access the portal.',
+    unauthorized:    '⚠️ Your session was invalidated. Please sign in again.'
+  };
+  const notice = document.getElementById('urlNotice');
+  notice.textContent = messages[reason] || '';
+  if (messages[reason]) notice.classList.add('show');
+}
+
+// If already authenticated, redirect to dashboard
+if (authService.isAuthenticated()) {
+  window.location.href = '/src/pages/dashboard.html';
+}
+
+// ── TAB SWITCH ─────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (tab==='login' && i===0) || (tab==='register' && i===1));
+  });
+  document.getElementById('loginPanel').classList.toggle('active', tab==='login');
+  document.getElementById('registerPanel').classList.toggle('active', tab==='register');
+}
+
+// ── LOGIN ──────────────────────────────────────────────
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError('loginError','loginErrorMsg','Please enter a valid email address.');
+    return;
+  }
+  setLoading('loginBtn', true);
+  hideAlert('loginError');
+  try {
+    await authService.requestLoginLink(email);
+    document.getElementById('loginEmailSent').textContent = email;
+    document.getElementById('loginFormWrap').style.display = 'none';
+    document.getElementById('loginSuccess').classList.add('show');
+  } catch(e) {
+    showError('loginError','loginErrorMsg', e.message);
+  } finally {
+    setLoading('loginBtn', false);
+  }
+}
+
+function resetLoginForm() {
+  document.getElementById('loginFormWrap').style.display = 'block';
+  document.getElementById('loginSuccess').classList.remove('show');
+  document.getElementById('loginEmail').value = '';
+}
+
+// ── REGISTER ───────────────────────────────────────────
+async function handleRegister() {
+  const name  = document.getElementById('registerName').value.trim();
+  const email = document.getElementById('registerEmail').value.trim();
+  if (!name) { showError('registerError','registerErrorMsg','Please enter your full name.'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError('registerError','registerErrorMsg','Please enter a valid email address.');
+    return;
+  }
+  setLoading('registerBtn', true);
+  hideAlert('registerError');
+  try {
+    await authService.register(name, email);
+    document.getElementById('registerEmailSent').textContent = email;
+    document.getElementById('registerFormWrap').style.display = 'none';
+    document.getElementById('registerSuccess').classList.add('show');
+  } catch(e) {
+    showError('registerError','registerErrorMsg', e.message);
+  } finally {
+    setLoading('registerBtn', false);
+  }
+}
+
+// ── HELPERS ────────────────────────────────────────────
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> Sending...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = btnId === 'loginBtn' ? 'Send Sign-In Link' : 'Register &amp; Send Confirmation';
+  }
+}
+function showError(alertId, msgId, msg) {
+  document.getElementById(msgId).textContent = msg;
+  document.getElementById(alertId).classList.add('show');
+}
+function hideAlert(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// Enter key
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (document.getElementById('loginPanel').classList.contains('active')) handleLogin();
+  else handleRegister();
+});
+</script>
+</body>
+</html>

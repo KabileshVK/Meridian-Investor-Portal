@@ -1,0 +1,44 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "files.exclude": {
+      "node_modules": true,
+      ".git": true
+    },
+    "liveServer.settings.port": 3000,
+    "liveServer.settings.root": "/src",
+    "liveServer.settings.open": true,
+    "liveServer.settings.file": "login.html"
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Open Login Page",
+        "type": "msedge",
+        "request": "launch",
+        "url": "http://localhost:3000/login.html",
+        "webRoot": "${workspaceFolder}/src"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Dev Server",
+        "type": "shell",
+        "command": "npx live-server src --port=3000",
+        "group": { "kind": "build", "isDefault": true },
+        "presentation": { "reveal": "always", "panel": "new" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-vscode.vscode-typescript-next",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ritwickdey.LiveServer",
+    "ms-azuretools.vscode-azurestaticwebapps",
+    "GitHub.vscode-pull-request-github"
+  ]
+}

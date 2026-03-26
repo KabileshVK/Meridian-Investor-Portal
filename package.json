@@ -1,0 +1,15 @@
+{
+  "name": "meridian-investor-portal",
+  "version": "1.0.0",
+  "description": "Enterprise Investor Portal — Meridian Capital",
+  "scripts": {
+    "start": "npx serve src -l 3000",
+    "dev": "npx live-server src --port=3000",
+    "build": "echo 'Static site — no build step needed. Deploy src/ folder.'",
+    "lint": "npx eslint src/**/*.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

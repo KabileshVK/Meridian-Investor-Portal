@@ -1,0 +1,26 @@
+# Secrets — NEVER commit these
+src/config.js
+*.env
+.env
+.env.local
+.env.production
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+logs/

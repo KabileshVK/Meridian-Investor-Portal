@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Dashboard — Meridian Investor Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="stylesheet" href="../styles/dashboard.css"/>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ════════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">M</div>
+    <div>
+      <div class="brand-name">Meridian Capital</div>
+      <div class="brand-sub">Investor Portal</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Portfolio</div>
+    <a class="nav-item active" onclick="showPage('dashboard',this)" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item" onclick="showPage('reports',this)" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0121 9.414V19a2 2 0 01-2 2z"/></svg>
+      Quarterly Reports
+      <span class="nav-badge">Q4</span>
+    </a>
+    <a class="nav-item" onclick="showPage('maps',this)" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+      Property Maps
+    </a>
+  </nav>
+
+  <nav class="sidebar-nav admin-only" id="adminNav" style="display:none">
+    <div class="nav-section-label">Administration</div>
+    <a class="nav-item" onclick="showPage('users',this)" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      User Management
+    </a>
+    <a class="nav-item" onclick="showPage('data',this)" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+      Data Upload
+    </a>
+    <a class="nav-item" onclick="showPage('settings',this)" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke-width="1.8"/></svg>
+      Portal Settings
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebarAvatar">--</div>
+      <div class="user-info">
+        <div class="user-name"  id="sidebarName">Loading...</div>
+        <div class="user-role"  id="sidebarRole">--</div>
+      </div>
+      <button class="logout-btn" onclick="authService.logout()" title="Sign out">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ════════════════════════════════════════════════ -->
+<div class="main-wrap">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-breadcrumb" id="topbarBreadcrumb">Portfolio Overview</div>
+    </div>
+    <div class="topbar-right">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        Q4 2024 · Live Data
+      </div>
+      <div class="topbar-fund" id="topbarFund"></div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="content" id="mainContent">
+
+    <!-- ── DASHBOARD ── -->
+    <section id="page-dashboard" class="page active">
+      <div class="page-intro">
+        <h2 class="page-title">Portfolio Overview</h2>
+        <p class="page-subtitle" id="dashboardSubtitle">Q4 2024 · Loading...</p>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid" id="kpiGrid">
+        <div class="kpi-card kpi-blue">
+          <div class="kpi-top"><span class="kpi-label">Net Asset Value</span><div class="kpi-icon kpi-icon-blue">£</div></div>
+          <div class="kpi-val" id="kpiNAV">—</div>
+          <div class="kpi-delta kpi-up" id="kpiNAVDelta">Loading...</div>
+        </div>
+        <div class="kpi-card kpi-green">
+          <div class="kpi-top"><span class="kpi-label">Occupancy Rate</span><div class="kpi-icon kpi-icon-green">%</div></div>
+          <div class="kpi-val" id="kpiOcc">—</div>
+          <div class="kpi-delta kpi-up" id="kpiOccDelta">Loading...</div>
+        </div>
+        <div class="kpi-card kpi-gold">
+          <div class="kpi-top"><span class="kpi-label">Rental Income (Q)</span><div class="kpi-icon kpi-icon-gold">↑</div></div>
+          <div class="kpi-val" id="kpiIncome">—</div>
+          <div class="kpi-delta kpi-up" id="kpiIncomeDelta">Loading...</div>
+        </div>
+        <div class="kpi-card kpi-red">
+          <div class="kpi-top"><span class="kpi-label">Churn Rate</span><div class="kpi-icon kpi-icon-red">↓</div></div>
+          <div class="kpi-val" id="kpiChurn">—</div>
+          <div class="kpi-delta kpi-down" id="kpiChurnDelta">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Charts row 1 -->
+      <div class="chart-row">
+        <div class="card chart-card-sm">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Portfolio Split</div>
+              <div class="card-sub">By asset class</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="chartDonut" height="180"></canvas>
+            <div class="donut-legend" id="donutLegend"></div>
+          </div>
+        </div>
+        <div class="card chart-card-lg">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Rental Income Trend</div>
+              <div class="card-sub">Last 8 quarters (£M)</div>
+            </div>
+          </div>
+          <div class="card-body"><canvas id="chartLine" height="200"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Charts row 2 -->
+      <div class="chart-row">
+        <div class="card" style="flex:1">
+          <div class="card-header">
+            <div class="card-title">CapEx by City</div>
+            <span class="badge badge-blue">Budget vs Actual</span>
+          </div>
+          <div class="card-body"><canvas id="chartBar" height="200"></canvas></div>
+        </div>
+        <div class="card" style="flex:1">
+          <div class="card-header"><div class="card-title">Recent Activity</div></div>
+          <div class="card-body" id="activityFeed"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── REPORTS ── -->
+    <section id="page-reports" class="page">
+      <div class="page-intro">
+        <h2 class="page-title">Quarterly Reports</h2>
+        <p class="page-subtitle">Secure investor reporting archive</p>
+      </div>
+      <div class="card mb-24">
+        <div class="card-header" style="padding:24px">
+          <div class="card-title">Report Archive</div>
+          <input class="search-input" placeholder="Search reports..." oninput="filterReports(this.value)"/>
+        </div>
+        <div class="card-body p0">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Report</th><th>Period</th><th>Published</th><th>NAV</th><th>Occupancy</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="reportsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-blue"><div class="kpi-top"><span class="kpi-label">YTD Income</span></div><div class="kpi-val">£11.4M</div><div class="kpi-delta kpi-up">↑ 12.1% vs 2023</div></div>
+        <div class="kpi-card kpi-green"><div class="kpi-top"><span class="kpi-label">Avg Occupancy 2024</span></div><div class="kpi-val">91.7%</div><div class="kpi-delta kpi-up">↑ 2.8pp vs 2023</div></div>
+        <div class="kpi-card kpi-gold"><div class="kpi-top"><span class="kpi-label">Total CapEx 2024</span></div><div class="kpi-val">£2.84M</div><div class="kpi-delta kpi-down">↑ 18.4% vs plan</div></div>
+        <div class="kpi-card kpi-red"><div class="kpi-top"><span class="kpi-label">Total Properties</span></div><div class="kpi-val">47</div><div class="kpi-delta kpi-up">↑ 4 acquired</div></div>
+      </div>
+    </section>
+
+    <!-- ── MAPS ── -->
+    <section id="page-maps" class="page">
+      <div class="page-intro">
+        <h2 class="page-title">Property Map Generator</h2>
+        <p class="page-subtitle">Generate and view interactive portfolio maps — no coding required</p>
+      </div>
+      <div class="card mb-24">
+        <div class="card-header" style="padding:20px 24px">
+          <div class="card-title">Map Controls</div>
+          <button class="btn btn-primary btn-sm" onclick="regenerateMap()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Regenerate
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="map-controls">
+            <div class="ctrl-group"><label>Map Type</label>
+              <select id="mapType" onchange="regenerateMap()">
+                <option value="locations">Property Locations</option>
+                <option value="heatmap">Vacancy Heatmap</option>
+                <option value="income">Income Density</option>
+              </select>
+            </div>
+            <div class="ctrl-group"><label>City</label>
+              <select id="cityFilter" onchange="regenerateMap()">
+                <option value="all">All Cities</option>
+                <option value="London">London</option>
+                <option value="Manchester">Manchester</option>
+                <option value="Birmingham">Birmingham</option>
+                <option value="Leeds">Leeds</option>
+                <option value="Bristol">Bristol</option>
+              </select>
+            </div>
+            <div class="ctrl-group"><label>Asset Class</label>
+              <select id="assetFilter" onchange="regenerateMap()">
+                <option value="all">All Types</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Mixed Use">Mixed Use</option>
+              </select>
+            </div>
+            <div class="ctrl-group"><label>Min Occupancy %</label>
+              <input type="number" id="minOcc" value="0" min="0" max="100" style="width:100px" onchange="regenerateMap()"/>
+            </div>
+          </div>
+          <div id="propertyMap" style="height:480px;border-radius:10px;overflow:hidden"></div>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-blue"><div class="kpi-top"><span class="kpi-label">Total Properties</span></div><div class="kpi-val" id="mapStatTotal">47</div></div>
+        <div class="kpi-card kpi-green"><div class="kpi-top"><span class="kpi-label">Avg Occupancy</span></div><div class="kpi-val" id="mapStatOcc">94.2%</div></div>
+        <div class="kpi-card kpi-gold"><div class="kpi-top"><span class="kpi-label">Vacant Units</span></div><div class="kpi-val" id="mapStatVacant">18</div></div>
+        <div class="kpi-card kpi-red"><div class="kpi-top"><span class="kpi-label">Cities</span></div><div class="kpi-val">7</div></div>
+      </div>
+    </section>
+
+    <!-- ── USERS (Admin) ── -->
+    <section id="page-users" class="page">
+      <div class="page-intro">
+        <h2 class="page-title">User Management</h2>
+        <p class="page-subtitle">Manage investor accounts and access permissions</p>
+      </div>
+      <div class="card">
+        <div class="card-header" style="padding:20px 24px">
+          <div class="card-title">Portal Users</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addUserModal')">+ Add User</button>
+        </div>
+        <div class="card-body p0">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>User</th><th>Role</th><th>Fund Access</th><th>Status</th><th>Last Login</th><th>Actions</th></tr></thead>
+              <tbody id="usersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DATA UPLOAD (Admin) ── -->
+    <section id="page-data" class="page">
+      <div class="page-intro">
+        <h2 class="page-title">Data Upload</h2>
+        <p class="page-subtitle">Upload new data to refresh investor dashboards</p>
+      </div>
+      <div class="upload-grid">
+        <div class="card">
+          <div class="card-header"><div class="card-title">KPI & Financial Data</div></div>
+          <div class="card-body">
+            <div class="upload-zone" onclick="simulateUpload('KPI Data', 'kpiUploadStatus')">
+              <div class="upload-icon">📊</div>
+              <p><strong>Click to upload</strong> or drag & drop</p>
+              <p class="upload-hint">JSON or CSV · Max 10MB</p>
+            </div>
+            <div class="upload-status" id="kpiUploadStatus"></div>
+            <div class="upload-meta">Last updated: <strong>15 Jan 2025 · 09:42</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Property Map Data</div></div>
+          <div class="card-body">
+            <div class="upload-zone" onclick="simulateUpload('Map Data', 'mapUploadStatus')">
+              <div class="upload-icon">🗺️</div>
+              <p><strong>Click to upload</strong> or drag & drop</p>
+              <p class="upload-hint">GeoJSON or CSV · Max 25MB</p>
+            </div>
+            <div class="upload-status" id="mapUploadStatus"></div>
+            <div class="upload-meta">Last updated: <strong>12 Jan 2025 · 14:15</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Investor Reports</div></div>
+          <div class="card-body">
+            <div class="upload-zone" onclick="simulateUpload('Report PDF', 'reportUploadStatus')">
+              <div class="upload-icon">📄</div>
+              <p><strong>Click to upload</strong> or drag & drop</p>
+              <p class="upload-hint">PDF · Max 50MB</p>
+            </div>
+            <div class="upload-status" id="reportUploadStatus"></div>
+            <div class="upload-meta">Last updated: <strong>15 Jan 2025 · 10:00</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-24">
+        <div class="card-header"><div class="card-title">Upload History</div></div>
+        <div class="card-body p0">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Filename</th><th>Type</th><th>Uploaded By</th><th>Date</th><th>Size</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">q4_2024_kpi.json</td><td><span class="badge badge-blue">KPI</span></td><td>Sarah Mitchell</td><td>15 Jan 2025</td><td>124 KB</td><td><span class="badge badge-green dot-badge">Active</span></td></tr>
+                <tr><td class="mono">properties_jan25.geojson</td><td><span class="badge badge-gold">Map</span></td><td>James Hartley</td><td>12 Jan 2025</td><td>2.4 MB</td><td><span class="badge badge-green dot-badge">Active</span></td></tr>
+                <tr><td class="mono">q4_2024_report.pdf</td><td><span class="badge badge-gray">Report</span></td><td>Sarah Mitchell</td><td>15 Jan 2025</td><td>8.2 MB</td><td><span class="badge badge-green dot-badge">Active</span></td></tr>
+                <tr><td class="mono">q3_2024_kpi.json</td><td><span class="badge badge-blue">KPI</span></td><td>Sarah Mitchell</td><td>18 Oct 2024</td><td>118 KB</td><td><span class="badge badge-gray">Superseded</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SETTINGS (Admin) ── -->
+    <section id="page-settings" class="page">
+      <div class="page-intro">
+        <h2 class="page-title">Portal Settings</h2>
+        <p class="page-subtitle">Configure portal behaviour, security and branding</p>
+      </div>
+      <div class="settings-grid">
+        <div class="card">
+          <div class="card-header"><div class="card-title">General</div></div>
+          <div class="card-body">
+            <div class="form-group"><label>Portal Name</label><input value="Meridian Investor Portal"/></div>
+            <div class="form-group"><label>Company Name</label><input value="Meridian Capital"/></div>
+            <div class="form-group"><label>Support Email</label><input value="investor.relations@meridian.com"/></div>
+            <div class="form-group"><label>Default Currency</label><select><option>GBP (£)</option><option>USD ($)</option><option>EUR (€)</option></select></div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('✅ Settings saved')">Save Changes</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Security</div></div>
+          <div class="card-body">
+            <div class="form-group"><label>Session Timeout (minutes)</label><input type="number" value="30"/></div>
+            <div class="form-group"><label>Magic Link Expiry (minutes)</label><input type="number" value="15"/></div>
+            <div class="form-group"><label>MFA Requirement</label><select><option>Required — all users</option><option>Required — admins only</option><option>Optional</option></select></div>
+            <div class="form-group"><label>Max Login Attempts</label><input type="number" value="5"/></div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('✅ Security settings saved')">Save Changes</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">SharePoint Connection</div></div>
+          <div class="card-body">
+            <div class="form-group"><label>Site URL</label><input value="https://prudentautolytics49.sharepoint.com/sites/ASP-InestorPortal" readonly style="font-size:12px;color:var(--text-muted)"/></div>
+            <div class="form-group"><label>Connection Status</label>
+              <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface);border-radius:8px;font-size:13px">
+                <span style="width:8px;height:8px;border-radius:50%;background:#0E7C4A"></span>
+                Connected · Last sync 2 min ago
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="showToast('🔄 Testing SharePoint connection...')">Test Connection</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══ ADD USER MODAL ══════════════════════════════════════ -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Add New User</h3>
+      <button class="btn-icon" onclick="closeModal('addUserModal')">✕</button>
+    </div>
+    <div class="form-group"><label>Full Name</label><input id="newName" placeholder="e.g. James Hartley"/></div>
+    <div class="form-group"><label>Email Address</label><input id="newEmail" type="email" placeholder="james@fund.com"/></div>
+    <div class="form-group"><label>Role</label>
+      <select id="newRole">
+        <option value="Investor">Investor</option>
+        <option value="Viewer">Viewer (Read-only)</option>
+        <option value="Admin">Admin</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Fund Access</label>
+      <select id="newFund">
+        <option>Fund I — Residential</option>
+        <option>Fund II — Commercial</option>
+        <option>Fund III — Mixed Portfolio</option>
+        <option>All Funds</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addUserAction()">Create & Send Invite</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span id="toastMsg"></span></div>
+
+<!-- SCRIPTS -->
+<script src="../config.example.js"></script>
+<script src="../services/sharepoint.js"></script>
+<script src="../services/auth.js"></script>
+<script src="../utils/data.js"></script>
+<script src="../utils/charts.js"></script>
+<script src="../utils/map.js"></script>
+<script src="../utils/ui.js"></script>
+<script>
+// ── INIT ───────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!authService.requireAuth()) return;
+  const user = authService.getCurrentUser();
+
+  // Set user info
+  document.getElementById('sidebarAvatar').textContent = user.initials;
+  document.getElementById('sidebarName').textContent   = user.name;
+  document.getElementById('sidebarRole').textContent   = user.role;
+  document.getElementById('topbarFund').textContent    = user.fundAccess || '';
+
+  // Show admin nav
+  if (authService.isAdmin()) {
+    document.getElementById('adminNav').style.display = 'block';
+  }
+
+  // Load dashboard data
+  await loadDashboard(user);
+  initMap();
+});
+</script>
+</body>
+</html>
