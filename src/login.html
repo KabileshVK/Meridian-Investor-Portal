@@ -8,614 +8,466 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --primary:       #0A2540;
-  --accent:        #1E6FD9;
-  --accent-light:  #3D8EF0;
-  --accent-pale:   #EBF3FF;
-  --gold:          #C8A96E;
-  --success:       #0E7C4A;
-  --danger:        #B91C1C;
-  --white:         #FFFFFF;
-  --surface:       #F7F9FC;
-  --border:        #D8E2F0;
-  --text-primary:  #0A2540;
-  --text-secondary:#4A6080;
-  --text-muted:    #8099B8;
-  --shadow-xl:     0 20px 60px rgba(10,37,64,0.18);
-  --radius:        10px;
-  --radius-lg:     16px;
+  --primary:#0A2540; --accent:#1E6FD9; --accent-light:#3D8EF0;
+  --accent-pale:#EBF3FF; --gold:#C8A96E; --success:#0E7C4A;
+  --danger:#B91C1C; --white:#FFFFFF; --surface:#F7F9FC;
+  --border:#D8E2F0; --text-primary:#0A2540;
+  --text-secondary:#4A6080; --text-muted:#8099B8;
+  --radius:10px; --radius-lg:16px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--primary);min-height:100vh;display:flex;overflow:hidden}
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--primary);
-  min-height: 100vh;
-  display: flex;
-  overflow: hidden;
-}
+/* LEFT */
+.left-panel{width:52%;background:linear-gradient(150deg,#061A30 0%,#0A2540 40%,#0F3460 100%);display:flex;flex-direction:column;justify-content:space-between;padding:56px 72px;position:relative;overflow:hidden}
+.left-panel::before{content:'';position:absolute;top:-200px;right:-200px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(30,111,217,0.12) 0%,transparent 70%);pointer-events:none}
+.grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.brand{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.brand-mark{width:44px;height:44px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--primary)}
+.brand-text h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--white);line-height:1.1}
+.brand-text span{font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.12em}
+.hero{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.25);border-radius:20px;padding:6px 14px;margin-bottom:28px}
+.hero-eyebrow span{font-size:11px;font-weight:500;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:glow 2s infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(200,169,110,0.4)}50%{box-shadow:0 0 0 6px rgba(200,169,110,0)}}
+.hero h2{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;color:var(--white);line-height:1.15;margin-bottom:24px;letter-spacing:-0.5px}
+.hero h2 em{color:var(--gold);font-style:normal}
+.hero p{font-size:16px;color:rgba(255,255,255,0.55);line-height:1.75;max-width:400px}
+.stats{display:flex;gap:48px;position:relative;z-index:1;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08)}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.stat-label{font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px}
 
-/* ── LEFT PANEL ── */
-.left-panel {
-  width: 56%;
-  background: linear-gradient(150deg, #061A30 0%, #0A2540 40%, #0F3460 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 56px 72px;
-  position: relative;
-  overflow: hidden;
-}
-.left-panel::before {
-  content: '';
-  position: absolute;
-  top: -200px; right: -200px;
-  width: 700px; height: 700px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(30,111,217,0.12) 0%, transparent 70%);
-  pointer-events: none;
-}
-.left-panel::after {
-  content: '';
-  position: absolute;
-  bottom: -300px; left: -100px;
-  width: 600px; height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
-  pointer-events: none;
-}
+/* RIGHT */
+.right-panel{flex:1;background:var(--white);display:flex;align-items:center;justify-content:center;padding:48px 56px;position:relative}
+.form-container{width:100%;max-width:400px}
 
-/* Grid texture overlay */
-.left-panel .grid-overlay {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
-}
+/* TABS */
+.auth-tabs{display:flex;background:var(--surface);border-radius:var(--radius);padding:4px;margin-bottom:36px}
+.tab-btn{flex:1;padding:10px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border-radius:7px;transition:all 0.2s}
+.tab-btn.active{background:var(--white);color:var(--primary);font-weight:600;box-shadow:0 1px 6px rgba(10,37,64,0.08)}
+.form-panel{display:none;animation:fadeIn 0.25s ease}
+.form-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-.brand {
-  display: flex; align-items: center; gap: 14px;
-  position: relative; z-index: 1;
-}
-.brand-mark {
-  width: 44px; height: 44px;
-  background: var(--gold);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px; font-weight: 700; color: var(--primary);
-  letter-spacing: -0.5px;
-}
-.brand-text h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px; font-weight: 600;
-  color: var(--white); letter-spacing: 0.02em;
-  line-height: 1.1;
-}
-.brand-text span {
-  font-size: 11px; color: rgba(255,255,255,0.4);
-  text-transform: uppercase; letter-spacing: 0.12em;
-}
+.form-header{margin-bottom:28px}
+.form-header h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--primary);margin-bottom:6px}
+.form-header p{font-size:14px;color:var(--text-secondary);line-height:1.6}
 
-.hero { position: relative; z-index: 1; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(200,169,110,0.12);
-  border: 1px solid rgba(200,169,110,0.25);
-  border-radius: 20px;
-  padding: 6px 14px;
-  margin-bottom: 28px;
-}
-.hero-eyebrow span {
-  font-size: 11px; font-weight: 500;
-  color: var(--gold); letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.hero-eyebrow .pulse {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--gold); animation: glow 2s infinite;
-}
-@keyframes glow {
-  0%,100% { box-shadow: 0 0 0 0 rgba(200,169,110,0.4); }
-  50%      { box-shadow: 0 0 0 6px rgba(200,169,110,0); }
-}
-.hero h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 52px; font-weight: 600;
-  color: var(--white); line-height: 1.15;
-  margin-bottom: 24px;
-  letter-spacing: -0.5px;
-}
-.hero h2 em { color: var(--gold); font-style: normal; }
-.hero p {
-  font-size: 16px; color: rgba(255,255,255,0.55);
-  line-height: 1.75; max-width: 400px;
-}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px}
+.form-group input{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-primary);outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(30,111,217,0.10)}
+.form-group input::placeholder{color:#BDC9D8}
 
-.stats {
-  display: flex; gap: 48px;
-  position: relative; z-index: 1;
-  padding-top: 32px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-.stat-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 32px; font-weight: 700; color: var(--gold);
-  line-height: 1;
-}
-.stat-label {
-  font-size: 11px; color: rgba(255,255,255,0.4);
-  text-transform: uppercase; letter-spacing: 0.1em;
-  margin-top: 4px;
-}
+.btn-submit{width:100%;padding:14px;background:var(--accent);color:var(--white);border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-submit:hover:not(:disabled){background:var(--accent-light);transform:translateY(-1px);box-shadow:0 6px 20px rgba(30,111,217,0.30)}
+.btn-submit:disabled{opacity:0.65;cursor:not-allowed;transform:none}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── RIGHT PANEL ── */
-.right-panel {
-  flex: 1;
-  background: var(--white);
-  display: flex; align-items: center; justify-content: center;
-  padding: 48px 56px;
-  position: relative;
-}
+/* SUCCESS */
+.success-state{display:none;text-align:center;animation:fadeIn 0.3s ease}
+.success-state.show{display:block}
+.success-icon{width:64px;height:64px;border-radius:50%;background:#E6F4EE;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px}
+.success-state h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--primary);margin-bottom:10px}
+.success-state p{font-size:14px;color:var(--text-secondary);line-height:1.7}
+.email-highlight{display:inline-block;margin-top:8px;background:var(--accent-pale);color:var(--accent);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+.resend-link{display:block;margin-top:24px;font-size:13px;color:var(--text-muted)}
+.resend-link a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:500}
 
-.form-container {
-  width: 100%; max-width: 400px;
-}
+/* ALERT */
+.alert{display:none;padding:12px 16px;border-radius:var(--radius);margin-bottom:20px;font-size:13px;line-height:1.5}
+.alert.show{display:flex;align-items:flex-start;gap:10px}
+.alert-error{background:#FEE2E2;color:var(--danger);border:1px solid #FECACA}
 
-/* Tabs */
-.auth-tabs {
-  display: flex;
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 4px; margin-bottom: 36px;
-}
-.tab-btn {
-  flex: 1; padding: 10px;
-  border: none; background: transparent;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px; font-weight: 500;
-  color: var(--text-muted); cursor: pointer;
-  border-radius: 7px; transition: all 0.2s;
-}
-.tab-btn.active {
-  background: var(--white);
-  color: var(--primary);
-  font-weight: 600;
-  box-shadow: 0 1px 6px rgba(10,37,64,0.08);
-}
+/* STATUS BOX */
+.status-box{padding:12px 16px;border-radius:var(--radius);margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:10px}
+.status-box.info{background:var(--accent-pale);color:var(--accent);border:1px solid #BFDBFE}
+.status-box.success{background:#E6F4EE;color:var(--success);border:1px solid #BBF7D0}
 
-.form-panel { display: none; animation: fadeIn 0.25s ease; }
-.form-panel.active { display: block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+/* SECURITY */
+.security-badges{display:flex;gap:16px;margin-top:28px;justify-content:center}
+.sec-badge{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted)}
 
-.form-header { margin-bottom: 28px; }
-.form-header h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px; font-weight: 600;
-  color: var(--primary); margin-bottom: 6px;
-}
-.form-header p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
-
-.form-group { margin-bottom: 18px; }
-.form-group label {
-  display: block; font-size: 11px; font-weight: 600;
-  letter-spacing: 0.09em; text-transform: uppercase;
-  color: var(--text-secondary); margin-bottom: 8px;
-}
-.form-group input {
-  width: 100%; padding: 13px 16px;
-  border: 1.5px solid var(--border); border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif; font-size: 14px;
-  color: var(--text-primary); outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  background: var(--white);
-}
-.form-group input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(30,111,217,0.10);
-}
-.form-group input::placeholder { color: #BDC9D8; }
-
-.btn-submit {
-  width: 100%; padding: 14px;
-  background: var(--accent); color: var(--white);
-  border: none; border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  position: relative; overflow: hidden;
-}
-.btn-submit:hover:not(:disabled) {
-  background: var(--accent-light);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(30,111,217,0.30);
-}
-.btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
-.btn-submit .spinner {
-  width: 16px; height: 16px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Success State */
-.success-state {
-  display: none; text-align: center;
-  animation: fadeIn 0.3s ease;
-}
-.success-state.show { display: block; }
-.success-icon {
-  width: 64px; height: 64px; border-radius: 50%;
-  background: #E6F4EE;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 20px;
-  font-size: 28px;
-}
-.success-state h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px; font-weight: 600;
-  color: var(--primary); margin-bottom: 10px;
-}
-.success-state p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
-.success-state .email-highlight {
-  display: inline-block; margin-top: 8px;
-  background: var(--accent-pale); color: var(--accent);
-  padding: 6px 14px; border-radius: 20px;
-  font-size: 13px; font-weight: 600;
-}
-.resend-link {
-  display: block; margin-top: 24px;
-  font-size: 13px; color: var(--text-muted);
-}
-.resend-link a {
-  color: var(--accent); cursor: pointer;
-  text-decoration: none; font-weight: 500;
-}
-.resend-link a:hover { text-decoration: underline; }
-
-/* Alert */
-.alert {
-  display: none; padding: 12px 16px;
-  border-radius: var(--radius); margin-bottom: 20px;
-  font-size: 13px; line-height: 1.5;
-}
-.alert.show { display: flex; align-items: flex-start; gap: 10px; }
-.alert-error { background: #FEE2E2; color: var(--danger); border: 1px solid #FECACA; }
-.alert-info  { background: var(--accent-pale); color: var(--accent); border: 1px solid #BFDBFE; }
-
-/* Security badges */
-.security-badges {
-  display: flex; gap: 16px; margin-top: 28px;
-  justify-content: center;
-}
-.sec-badge {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 11px; color: var(--text-muted);
-}
-.sec-badge svg { color: var(--success); }
-
-/* URL params alert */
-.url-notice {
-  display: none; position: absolute; top: 24px;
-  left: 50%; transform: translateX(-50%);
-  background: var(--accent-pale); color: var(--accent);
-  padding: 10px 20px; border-radius: 20px;
-  font-size: 13px; font-weight: 500;
-  white-space: nowrap;
-}
-.url-notice.show { display: block; }
-
-@media (max-width: 860px) {
-  .left-panel { display: none; }
-  .right-panel { padding: 32px 24px; }
-}
+@media(max-width:860px){.left-panel{display:none}.right-panel{padding:32px 24px}}
 </style>
 </head>
 <body>
-
-<!-- ── LEFT PANEL ── -->
 <div class="left-panel">
   <div class="grid-overlay"></div>
-
   <div class="brand">
     <div class="brand-mark">M</div>
-    <div class="brand-text">
-      <h1>Meridian Capital</h1>
-      <span>Investor Portal</span>
-    </div>
+    <div class="brand-text"><h1>Meridian Capital</h1><span>Investor Portal</span></div>
   </div>
-
   <div class="hero">
-    <div class="hero-eyebrow">
-      <div class="pulse"></div>
-      <span>Q4 2024 Reports Live</span>
-    </div>
+    <div class="hero-eyebrow"><div class="pulse"></div><span>Q4 2024 Reports Live</span></div>
     <h2>Your <em>portfolio</em>,<br>always in view.</h2>
-    <p>Secure, real-time access to your investment performance, property maps, and quarterly reporting — all in one enterprise-grade platform.</p>
+    <p>Secure, real-time access to your investment performance, property maps, and quarterly reporting.</p>
   </div>
-
   <div class="stats">
-    <div>
-      <div class="stat-val">£248M</div>
-      <div class="stat-label">Assets Under Mgmt</div>
-    </div>
-    <div>
-      <div class="stat-val">94.2%</div>
-      <div class="stat-label">Occupancy Rate</div>
-    </div>
-    <div>
-      <div class="stat-val">47</div>
-      <div class="stat-label">Properties</div>
-    </div>
-    <div>
-      <div class="stat-val">7</div>
-      <div class="stat-label">Active Cities</div>
-    </div>
+    <div><div class="stat-val">£248M</div><div class="stat-label">Assets Under Mgmt</div></div>
+    <div><div class="stat-val">94.2%</div><div class="stat-label">Occupancy Rate</div></div>
+    <div><div class="stat-val">47</div><div class="stat-label">Properties</div></div>
   </div>
 </div>
 
-<!-- ── RIGHT PANEL ── -->
 <div class="right-panel">
-  <div class="url-notice" id="urlNotice"></div>
-
   <div class="form-container">
     <div class="auth-tabs">
       <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
       <button class="tab-btn" onclick="switchTab('register')">Register</button>
     </div>
 
-    <!-- LOGIN FORM -->
+    <!-- LOGIN -->
     <div id="loginPanel" class="form-panel active">
       <div id="loginFormWrap">
         <div class="form-header">
           <h3>Welcome back</h3>
-          <p>Enter your email and we'll send you a secure sign-in link — no password needed.</p>
+          <p>Enter your email and we'll send a secure sign-in link.</p>
         </div>
         <div class="alert alert-error" id="loginError">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 8v4m0 4h.01"/></svg>
           <span id="loginErrorMsg"></span>
         </div>
+        <div id="loginStatus"></div>
         <div class="form-group">
           <label>Email Address</label>
           <input type="email" id="loginEmail" placeholder="you@organisation.com" autocomplete="email"/>
         </div>
-        <button class="btn-submit" id="loginBtn" onclick="handleLogin()">
-          Send Sign-In Link
-        </button>
+        <button class="btn-submit" id="loginBtn" onclick="handleLogin()">Send Sign-In Link</button>
         <div class="security-badges">
-          <div class="sec-badge">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-            Passwordless
-          </div>
-          <div class="sec-badge">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            256-bit Encrypted
-          </div>
-          <div class="sec-badge">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-            Single-Use Link
-          </div>
+          <div class="sec-badge">🔒 Passwordless</div>
+          <div class="sec-badge">🛡 Encrypted</div>
+          <div class="sec-badge">⏱ 15min link</div>
         </div>
       </div>
-      <!-- Success state -->
       <div class="success-state" id="loginSuccess">
         <div class="success-icon">📨</div>
         <h3>Check your inbox</h3>
-        <p>We've sent a secure sign-in link to:<br/><span class="email-highlight" id="loginEmailSent"></span></p>
-        <p style="margin-top:14px;font-size:13px;color:var(--text-muted)">The link expires in 15 minutes and can only be used once.</p>
+        <p>Secure sign-in link sent to:<br/><span class="email-highlight" id="loginEmailSent"></span></p>
+        <p style="margin-top:14px;font-size:13px;color:var(--text-muted)">Link expires in 15 minutes. One use only.</p>
         <div class="resend-link">Didn't receive it? <a onclick="resetLoginForm()">Try again</a></div>
       </div>
     </div>
 
-    <!-- REGISTER FORM -->
+    <!-- REGISTER -->
     <div id="registerPanel" class="form-panel">
       <div id="registerFormWrap">
         <div class="form-header">
           <h3>Request access</h3>
-          <p>Register your account. Our team will review and activate your access within 1 business day.</p>
+          <p>Register your account. Admin will activate access within 1 business day.</p>
         </div>
         <div class="alert alert-error" id="registerError">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 8v4m0 4h.01"/></svg>
           <span id="registerErrorMsg"></span>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="registerName" placeholder="e.g. James Hartley" autocomplete="name"/>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="registerEmail" placeholder="you@organisation.com" autocomplete="email"/>
-        </div>
-        <div class="form-group">
-          <label>Organisation</label>
-          <input type="text" id="registerOrg" placeholder="e.g. Hartley Capital Partners"/>
-        </div>
-        <button class="btn-submit" id="registerBtn" onclick="handleRegister()">
-          Register &amp; Send Confirmation
-        </button>
+        <div id="registerStatus"></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="registerName" placeholder="e.g. James Hartley"/></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="registerEmail" placeholder="you@organisation.com"/></div>
+        <div class="form-group"><label>Organisation</label><input type="text" id="registerOrg" placeholder="e.g. Hartley Capital Partners"/></div>
+        <button class="btn-submit" id="registerBtn" onclick="handleRegister()">Register &amp; Send Confirmation</button>
       </div>
-      <!-- Success state -->
       <div class="success-state" id="registerSuccess">
         <div class="success-icon">✅</div>
         <h3>Registration submitted</h3>
-        <p>We've sent a confirmation email to:<br/><span class="email-highlight" id="registerEmailSent"></span></p>
-        <p style="margin-top:14px;font-size:13px;color:var(--text-muted)">Click the link in the email to verify your address. Our team will then review and activate your account.</p>
+        <p>Confirmation email sent to:<br/><span class="email-highlight" id="registerEmailSent"></span></p>
+        <p style="margin-top:14px;font-size:13px;color:var(--text-muted)">Click the link in the email to verify. Admin will then activate your account.</p>
         <div class="resend-link">Already have access? <a onclick="switchTab('login')">Sign in</a></div>
       </div>
     </div>
 
-  </div><!-- /form-container -->
-</div><!-- /right-panel -->
+  </div>
+</div>
 
+<!-- MSAL + CONFIG -->
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.11.1/lib/msal-browser.min.js"></script>
 <script>
-// ── MERIDIAN PORTAL CONFIG ─────────────────────────────
+// ── CONFIG ────────────────────────────────────────────────
 const msalConfig = {
   auth: {
-    clientId:                  "337fdd29-7d4d-4a39-9b4c-4ebc0ea7bf9a",
-    authority:                 "https://login.microsoftonline.com/8633bc14-1446-4b1a-b39b-9eab02755c9a",
-    redirectUri:               window.location.origin + "/src/login.html",
-    postLogoutRedirectUri:     window.location.origin + "/src/login.html",
-    navigateToLoginRequestUrl: false,
+    clientId:   "337fdd29-7d4d-4a39-9b4c-4ebc0ea7bf9a",
+    authority:  "https://login.microsoftonline.com/8633bc14-1446-4b1a-b39b-9eab02755c9a",
+    redirectUri: window.location.href.split('?')[0], // current page, no query string
   },
   cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: true },
 };
 const CONFIG = {
-  AZURE_AD: {
-    TENANT_ID:    "8633bc14-1446-4b1a-b39b-9eab02755c9a",
-    CLIENT_ID:    "337fdd29-7d4d-4a39-9b4c-4ebc0ea7bf9a",
-    REDIRECT_URI: window.location.origin + "/src/verify.html",
-  },
   GRAPH: {
-    BASE_URL:    "https://graph.microsoft.com/v1.0",
-    SEND_AS:     "Kabileshvijayakumar@prudentautolytics.com",
+    BASE_URL: "https://graph.microsoft.com/v1.0",
+    SEND_AS:  "Kabileshvijayakumar@prudentautolytics.com",
     SENDER_NAME: "Meridian Investor Portal",
-    SCOPES:      ["User.Read", "Mail.Send", "Sites.ReadWrite.All"],
+    SCOPES:   ["User.Read","Mail.Send","Sites.ReadWrite.All"],
   },
   SHAREPOINT: {
-    SITE_URL:  "https://prudentautolytics49.sharepoint.com/sites/ASP-InestorPortal",
-    SITE_ID:   "prudentautolytics49.sharepoint.com,df65f3e2-2570-42d0-91c5-ab2ad91b2eed,1af96729-9fc4-4230-9e6d-f1cb9cc226a0",
-    SP_SCOPES: ["https://prudentautolytics49.sharepoint.com/.default"],
-    LISTS: {
-      USERS:      "Portal_Users",
-      SESSIONS:   "Portal_Sessions",
-      REPORTS:    "Investor_Reports",
-      KPI_DATA:   "KPI_Data",
-      PROPERTIES: "Property_Data",
-      AUDIT_LOG:  "Audit_Log",
-      FUNDS:      "Funds"
-    }
+    SITE_ID: "prudentautolytics49.sharepoint.com,df65f3e2-2570-42d0-91c5-ab2ad91b2eed,1af96729-9fc4-4230-9e6d-f1cb9cc226a0",
+    LISTS: { USERS:"Portal_Users", SESSIONS:"Portal_Sessions", REPORTS:"Investor_Reports", KPI_DATA:"KPI_Data", PROPERTIES:"Property_Data", AUDIT_LOG:"Audit_Log", FUNDS:"Funds" }
   },
-  PORTAL: {
-    NAME:               "Meridian Investor Portal",
-    COMPANY:            "Meridian Capital",
-    SUPPORT_EMAIL:      "Kabileshvijayakumar@prudentautolytics.com",
-    MAGIC_LINK_EXPIRY:  15,
-    SESSION_TIMEOUT:    30,
-    MAX_LOGIN_ATTEMPTS: 5
-  }
+  PORTAL: { NAME:"Meridian Investor Portal", MAGIC_LINK_EXPIRY:15, SESSION_TIMEOUT:30 }
 };
-</script>
-<script src="services/sharepoint.js"></script>
-<script src="services/auth.js"></script>
-<script>
 
-// ── INIT — handle redirect response first ──────────────
-(async () => {
-  await getMSAL(); // handles redirect promise on return from MS login
+// ── MSAL INSTANCE ─────────────────────────────────────────
+let _msal = null;
+let _token = null;
 
-  // ── URL NOTICE ─────────────────────────────────────────
-  const params = new URLSearchParams(window.location.search);
-  const reason = params.get('reason');
-  if (reason) {
-    const messages = {
-      session_expired: '⏱ Your session expired — please sign in again.',
-      auth_required:   '🔒 Please sign in to access the portal.',
-      unauthorized:    '⚠️ Your session was invalidated. Please sign in again.'
-    };
-    const notice = document.getElementById('urlNotice');
-    if (notice && messages[reason]) {
-      notice.textContent = messages[reason];
-      notice.classList.add('show');
+async function initMSAL() {
+  if (_msal) return _msal;
+  _msal = new msal.PublicClientApplication(msalConfig);
+  await _msal.initialize();
+
+  // Handle redirect response
+  const resp = await _msal.handleRedirectPromise();
+  if (resp?.accessToken) {
+    _token = resp.accessToken;
+    showStatus('loginStatus', '✅ Microsoft account connected. You can now send the sign-in link.', 'success');
+    showStatus('registerStatus', '✅ Microsoft account connected. You can now register.', 'success');
+
+    // Resume pending action
+    const pending = sessionStorage.getItem('_pending');
+    if (pending) {
+      sessionStorage.removeItem('_pending');
+      const p = JSON.parse(pending);
+      if (p.action === 'login')    { document.getElementById('loginEmail').value = p.email; await doSendLoginLink(p.email); }
+      if (p.action === 'register') { document.getElementById('registerName').value = p.name; document.getElementById('registerEmail').value = p.email; document.getElementById('registerOrg').value = p.org||''; await doSendRegister(p.name, p.email, p.org||''); }
     }
   }
-
-  // If already authenticated, redirect to dashboard
-  if (authService.isAuthenticated()) {
-    window.location.href = '/src/pages/dashboard.html';
-  }
-})();
-
-// ── TAB SWITCH ─────────────────────────────────────────
-function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    b.classList.toggle('active', (tab==='login' && i===0) || (tab==='register' && i===1));
-  });
-  document.getElementById('loginPanel').classList.toggle('active', tab==='login');
-  document.getElementById('registerPanel').classList.toggle('active', tab==='register');
+  return _msal;
 }
 
-// ── LOGIN ──────────────────────────────────────────────
+async function getToken() {
+  if (_token) return _token;
+  const msalApp = await initMSAL();
+  const accounts = msalApp.getAllAccounts();
+  if (accounts.length > 0) {
+    try {
+      const r = await msalApp.acquireTokenSilent({ scopes: CONFIG.GRAPH.SCOPES, account: accounts[0] });
+      _token = r.accessToken; return _token;
+    } catch(e) {}
+  }
+  return null;
+}
+
+async function signInWithMicrosoft(pendingAction) {
+  const msalApp = await initMSAL();
+  sessionStorage.setItem('_pending', JSON.stringify(pendingAction));
+  await msalApp.loginRedirect({ scopes: CONFIG.GRAPH.SCOPES });
+}
+
+// ── GRAPH HELPERS ─────────────────────────────────────────
+async function graphGet(url) {
+  const token = await getToken();
+  const r = await fetch("https://graph.microsoft.com/v1.0" + url, {
+    headers: { Authorization: "Bearer " + token, Accept: "application/json" }
+  });
+  if (!r.ok) throw new Error("Graph error " + r.status + ": " + await r.text());
+  return r.json();
+}
+
+async function graphPost(url, body) {
+  const token = await getToken();
+  const r = await fetch("https://graph.microsoft.com/v1.0" + url, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (r.status === 204) return {};
+  if (!r.ok) throw new Error("Graph error " + r.status + ": " + await r.text());
+  return r.json();
+}
+
+async function graphPatch(url, body) {
+  const token = await getToken();
+  const r = await fetch("https://graph.microsoft.com/v1.0" + url, {
+    method: "PATCH",
+    headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error("Graph error " + r.status + ": " + await r.text());
+  return r.json();
+}
+
+// ── SHAREPOINT ────────────────────────────────────────────
+const SITE = "/sites/" + CONFIG.SHAREPOINT.SITE_ID;
+
+async function spGetItems(list, filter) {
+  let url = SITE + "/lists/" + list + "/items?expand=fields";
+  if (filter) url += "&$filter=" + encodeURIComponent(filter);
+  const d = await graphGet(url);
+  return (d.value || []).map(i => ({ id: i.id, ...i.fields }));
+}
+
+async function spCreateItem(list, fields) {
+  return graphPost(SITE + "/lists/" + list + "/items", { fields });
+}
+
+async function spUpdateItem(list, id, fields) {
+  return graphPatch(SITE + "/lists/" + list + "/items/" + id + "/fields", fields);
+}
+
+async function getUserByEmail(email) {
+  const items = await spGetItems(CONFIG.SHAREPOINT.LISTS.USERS, "fields/Email eq '" + email + "'");
+  return items[0] || null;
+}
+
+function generateToken() {
+  const a = new Uint8Array(48); crypto.getRandomValues(a);
+  return Array.from(a, b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function sendMagicEmail(toEmail, toName, link, type) {
+  const isReg = type === 'register';
+  const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F9FC;font-family:Segoe UI,sans-serif"><div style="max-width:520px;margin:40px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(10,37,64,0.10)"><div style="background:linear-gradient(135deg,#0A2540,#1E6FD9);padding:36px 40px"><div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#fff">Meridian <span style="color:#C8A96E">Capital</span></div></div><div style="padding:40px"><h2 style="font-family:Georgia,serif;font-size:24px;color:#0A2540;margin-bottom:12px">Hello, ${toName}</h2><p style="color:#4A6080;font-size:15px;line-height:1.7;margin-bottom:28px">${isReg ? 'Thank you for registering. Click below to confirm your email and activate your account.' : 'Click below to sign in to the Meridian Investor Portal securely.'}</p><a href="${link}" style="display:inline-block;background:#1E6FD9;color:#fff;padding:16px 36px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600">${isReg ? 'Confirm Registration' : 'Sign In Securely'}</a><p style="margin-top:20px;font-size:13px;color:#8099B8">⏱ This link expires in 15 minutes and can only be used once.</p><p style="font-size:12px;color:#8099B8;margin-top:8px">🔒 If you didn't request this, you can safely ignore this email.</p></div></div></body></html>`;
+  await graphPost("/users/" + CONFIG.GRAPH.SEND_AS + "/sendMail", {
+    message: {
+      subject: isReg ? "Confirm your Meridian Portal registration" : "Your Meridian Portal sign-in link",
+      body: { contentType: "HTML", content: html },
+      toRecipients: [{ emailAddress: { address: toEmail, name: toName } }]
+    },
+    saveToSentItems: false
+  });
+}
+
+// ── LOGIN FLOW ─────────────────────────────────────────────
 async function handleLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showError('loginError','loginErrorMsg','Please enter a valid email address.');
+    showError('loginError','loginErrorMsg','Please enter a valid email address.'); return;
+  }
+  setLoading('loginBtn', true, 'login');
+  hideAlert('loginError');
+
+  const token = await getToken();
+  if (!token) {
+    // Need MS login first
+    showStatus('loginStatus', '⏳ Redirecting to Microsoft login... please wait', 'info');
+    await signInWithMicrosoft({ action: 'login', email });
     return;
   }
-  setLoading('loginBtn', true);
-  hideAlert('loginError');
+  await doSendLoginLink(email);
+  setLoading('loginBtn', false, 'login');
+}
+
+async function doSendLoginLink(email) {
+  setLoading('loginBtn', true, 'login');
   try {
-    await authService.requestLoginLink(email);
+    const user = await getUserByEmail(email);
+    if (!user) throw new Error('No account found with this email. Please register first.');
+    if (user.Status === 'Suspended') throw new Error('Account suspended. Contact support.');
+
+    const tok = generateToken();
+    const expiry = new Date(Date.now() + CONFIG.PORTAL.MAGIC_LINK_EXPIRY * 60000).toISOString();
+    await spCreateItem(CONFIG.SHAREPOINT.LISTS.SESSIONS, {
+      Title: "session_" + Date.now(),
+      UserEmail: email, UserID: user.id,
+      Token: tok, ExpiresAt: expiry, Used: false
+    });
+
+    const link = window.location.origin + "/src/verify.html?token=" + tok;
+    await sendMagicEmail(email, user.Title || email, link, 'login');
+
     document.getElementById('loginEmailSent').textContent = email;
     document.getElementById('loginFormWrap').style.display = 'none';
     document.getElementById('loginSuccess').classList.add('show');
   } catch(e) {
     showError('loginError','loginErrorMsg', e.message);
   } finally {
-    setLoading('loginBtn', false);
+    setLoading('loginBtn', false, 'login');
   }
 }
 
-function resetLoginForm() {
-  document.getElementById('loginFormWrap').style.display = 'block';
-  document.getElementById('loginSuccess').classList.remove('show');
-  document.getElementById('loginEmail').value = '';
-}
-
-// ── REGISTER ───────────────────────────────────────────
+// ── REGISTER FLOW ──────────────────────────────────────────
 async function handleRegister() {
   const name  = document.getElementById('registerName').value.trim();
   const email = document.getElementById('registerEmail').value.trim();
-  if (!name) { showError('registerError','registerErrorMsg','Please enter your full name.'); return; }
+  const org   = document.getElementById('registerOrg').value.trim();
+  if (!name)  { showError('registerError','registerErrorMsg','Please enter your full name.'); return; }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showError('registerError','registerErrorMsg','Please enter a valid email address.');
+    showError('registerError','registerErrorMsg','Please enter a valid email address.'); return;
+  }
+  setLoading('registerBtn', true, 'register');
+  hideAlert('registerError');
+
+  const token = await getToken();
+  if (!token) {
+    showStatus('registerStatus', '⏳ Redirecting to Microsoft login... please wait', 'info');
+    await signInWithMicrosoft({ action: 'register', name, email, org });
     return;
   }
-  setLoading('registerBtn', true);
-  hideAlert('registerError');
+  await doSendRegister(name, email, org);
+  setLoading('registerBtn', false, 'register');
+}
+
+async function doSendRegister(name, email, org) {
+  setLoading('registerBtn', true, 'register');
   try {
-    await authService.register(name, email);
+    let user = await getUserByEmail(email);
+    if (user?.Status === 'Active') throw new Error('Account already exists. Please sign in instead.');
+    if (!user) {
+      await spCreateItem(CONFIG.SHAREPOINT.LISTS.USERS, {
+        Title: name, Email: email, Role: 'Investor',
+        FundAccess: 'Fund I — Residential', Status: 'PendingVerification',
+        Organisation: org, RegisteredAt: new Date().toISOString(), LoginCount: 0
+      });
+      user = await getUserByEmail(email);
+    }
+    const tok = generateToken();
+    const expiry = new Date(Date.now() + CONFIG.PORTAL.MAGIC_LINK_EXPIRY * 60000).toISOString();
+    await spCreateItem(CONFIG.SHAREPOINT.LISTS.SESSIONS, {
+      Title: "reg_" + Date.now(),
+      UserEmail: email, UserID: user?.id || '',
+      Token: tok, ExpiresAt: expiry, Used: false
+    });
+    const link = window.location.origin + "/src/verify.html?token=" + tok + "&action=register";
+    await sendMagicEmail(email, name, link, 'register');
+
     document.getElementById('registerEmailSent').textContent = email;
     document.getElementById('registerFormWrap').style.display = 'none';
     document.getElementById('registerSuccess').classList.add('show');
   } catch(e) {
     showError('registerError','registerErrorMsg', e.message);
   } finally {
-    setLoading('registerBtn', false);
+    setLoading('registerBtn', false, 'register');
   }
 }
 
-// ── HELPERS ────────────────────────────────────────────
-function setLoading(btnId, loading) {
+// ── UI HELPERS ─────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+  document.getElementById('loginPanel').classList.toggle('active', tab==='login');
+  document.getElementById('registerPanel').classList.toggle('active', tab==='register');
+}
+function setLoading(btnId, loading, type) {
   const btn = document.getElementById(btnId);
-  if (loading) {
-    btn.disabled = true;
-    btn.innerHTML = '<div class="spinner"></div> Sending...';
-  } else {
-    btn.disabled = false;
-    btn.innerHTML = btnId === 'loginBtn' ? 'Send Sign-In Link' : 'Register &amp; Send Confirmation';
-  }
+  if (!btn) return;
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<div class="spinner"></div> Sending...'
+    : (type === 'login' ? 'Send Sign-In Link' : 'Register &amp; Send Confirmation');
 }
 function showError(alertId, msgId, msg) {
   document.getElementById(msgId).textContent = msg;
   document.getElementById(alertId).classList.add('show');
 }
-function hideAlert(id) {
-  document.getElementById(id).classList.remove('show');
+function hideAlert(id) { document.getElementById(id).classList.remove('show'); }
+function showStatus(elId, msg, type) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = '<div class="status-box ' + type + '">' + msg + '</div>';
 }
-
-// Enter key
+function resetLoginForm() {
+  document.getElementById('loginFormWrap').style.display = 'block';
+  document.getElementById('loginSuccess').classList.remove('show');
+  document.getElementById('loginEmail').value = '';
+}
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   if (document.getElementById('loginPanel').classList.contains('active')) handleLogin();
   else handleRegister();
 });
+
+// Init on load
+initMSAL().catch(e => console.error('MSAL init error:', e));
 </script>
 </body>
 </html>
